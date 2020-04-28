@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F3F3"
+    tools:context="com.example.androidapp.CreateItemPopupActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="149dp"
+        android:layout_marginRight="149dp"
+        android:text="Voeg een vak toe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutVakCode"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/vakCode"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:hint="Vak code" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutCijfer"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutVakCode">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ec"
+            android:inputType="number"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:hint="EC" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginBottom="110dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="62dp"
+        android:layout_marginRight="62dp"
+        android:layout_marginBottom="110dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <CheckBox
+        android:id="@+id/keuzevak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginLeft="156dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="159dp"
+        android:layout_marginRight="159dp"
+        android:text="Keuzevak"
+        android:onClick="checkKeuzevak"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCijfer" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="172dp"
+        android:layout_marginLeft="172dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="173dp"
+        android:layout_marginRight="173dp"
+        android:text="Studiejaar:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/keuzevak" />
+
+    <RadioGroup
+        android:id="@+id/years"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginRight="63dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+        <RadioButton
+            android:id="@+id/year1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onYearRadioButtonClicked"
+            android:text="Jaar 1" />
+
+        <RadioButton
+            android:id="@+id/year2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onYearRadioButtonClicked"
+            android:text="Jaar 2" />
+
+        <RadioButton
+            android:id="@+id/year3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onYearRadioButtonClicked"
+            android:text="Jaar 3" />
+
+        <RadioButton
+            android:id="@+id/year4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onYearRadioButtonClicked"
+            android:text="Jaar 4" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/periods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginRight="63dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/years">
+
+        <RadioButton
+            android:id="@+id/period1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Periode 1"
+            android:onClick="onPeriodRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/period2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Periode 2"
+            android:onClick="onPeriodRadioButtonClicked" />
+
+        <RadioButton
+            android:id="@+id/period3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Periode 3"
+            android:onClick="onPeriodRadioButtonClicked" />
+
+        <RadioButton
+            android:id="@+id/period4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Periode 4"
+            android:onClick="onPeriodRadioButtonClicked" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,17 @@
 package com.example.androidapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
+import com.example.androidapp.Database.DataHandler;
+import com.example.androidapp.Models.Vak;
+import com.example.androidproject.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,38 +19,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        DataHandler.getHandler(getApplicationContext());
 
-       FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        BottomNavigationView navigation_view = findViewById(R.id.navigation_view);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        NavigationUI.setupWithNavController(navigation_view, navController);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (requestCode){
+            case 2: this.handleCreatePopup(intent);
+            case 3: this.handleEditPopup(intent);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void handleCreatePopup(Intent intent) {
+        if(!(intent.getExtras() == null)){
+            Bundle data = intent.getExtras();
+            Vak newVak = (Vak) data.getParcelable("result");
+            DataHandler datahander = DataHandler.getHandler();
+            datahander.addClass(newVak.getJaar(), newVak.getPeriode(), newVak);
+        }
+    }
+    private void handleEditPopup(Intent intent) {
+        if (!(intent.getExtras() == null)) {
+            Bundle data = intent.getExtras();
+            Vak editedVak = (Vak) data.getParcelable("result");
+            DataHandler datahander = DataHandler.getHandler();
+            datahander.addClass(editedVak.getJaar(), editedVak.getPeriode(), editedVak);
+        }
     }
 }
+

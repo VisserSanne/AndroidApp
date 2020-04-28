@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homepageFragment">
+    <fragment
+        android:id="@+id/homepageFragment"
+        android:name="com.example.androidapp.Homepage"
+        android:label="homepage"
+        tools:layout="@layout/fragment_homepage" />
+    <fragment
+        android:id="@+id/coursesFragment"
+        android:name="com.example.androidapp.Courses"
+        android:label="courses"
+        tools:layout="@layout/fragment_courses" />
+    <fragment
+        android:id="@+id/studiejaarFragment"
+        android:name="com.example.androidapp.Studiejaar"
+        android:label="studiejaar"
+        tools:layout="@layout/fragment_studiejaar" >
+        <action
+            android:id="@+id/action_studiejaarFragment_to_studiejaar1"
+            app:destination="@id/studiejaar1" />
+        <action
+            android:id="@+id/action_studiejaarFragment_to_studiejaar2"
+            app:destination="@id/studiejaar2" />
+        <action
+            android:id="@+id/action_studiejaarFragment_to_studiejaar3"
+            app:destination="@id/studiejaar3" />
+        <action
+            android:id="@+id/action_studiejaarFragment_to_studiejaar4"
+            app:destination="@id/studiejaar4" />
+    </fragment>
+    <fragment
+        android:id="@+id/studiejaar1"
+        android:name="com.example.androidapp.Studiejaren.Studiejaar1"
+        android:label="Studiejaar1" >
+        <action
+            android:id="@+id/action_studiejaar1_to_studiejaarFragment"
+            app:destination="@id/studiejaarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studiejaar2"
+        android:name="com.example.androidapp.Studiejaren.Studiejaar2"
+        android:label="Studiejaar2" >
+        <action
+            android:id="@+id/action_studiejaar2_to_studiejaarFragment"
+            app:destination="@id/studiejaarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studiejaar3"
+        android:name="com.example.androidapp.Studiejaren.Studiejaar3"
+        android:label="Studiejaar3" >
+        <action
+            android:id="@+id/action_studiejaar3_to_studiejaarFragment"
+            app:destination="@id/studiejaarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studiejaar4"
+        android:name="com.example.androidapp.Studiejaren.Studiejaar4"
+        android:label="Studiejaar4" >
+        <action
+            android:id="@+id/action_studiejaar4_to_studiejaarFragment"
+            app:destination="@id/studiejaarFragment" />
+    </fragment>
+</navigation>
