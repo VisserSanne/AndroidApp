@@ -23,7 +23,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
 
     RecyclerView recyclerView;
     private ArrayList<Vak> allCourses;
-    private static final String TAG = "RecyclerAdapter";
     private Activity activityParent;
 
     public RecyclerAdapter(ArrayList<Vak> vakken, Fragment fragment, View view) {

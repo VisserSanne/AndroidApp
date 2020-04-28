@@ -5,18 +5,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidapp.Models.Vak;
 import com.example.androidproject.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class EditItemPopupActivity extends Activity {
+    TextInputEditText cijfer;
+    TextInputEditText herkansingCijfer;
 
     Vak currVak;
     Button submit;
@@ -34,14 +39,14 @@ public class EditItemPopupActivity extends Activity {
         TextView title = findViewById(R.id.title);
         title.setText("Verander " + currVak.getVakcode());
 
-        TextInputEditText cijfer = findViewById(R.id.cijfer);
+        cijfer = findViewById(R.id.cijfer);
         if(currVak.getCijfer() != 0){
             cijfer.setText(Double.toString(currVak.getCijfer()));
         }
         cijfer.addTextChangedListener(getCijferTextWatcher());
 
         Switch heeftHerkansing = findViewById(R.id.herkansing);
-        TextInputEditText herkansingCijfer = findViewById(R.id.herkansingCijfer);
+        herkansingCijfer = findViewById(R.id.herkansingCijfer);
         if(currVak.isHerkansing()){
             heeftHerkansing.setChecked(true);
             if(currVak.getH1cijfer() != 0){
@@ -113,13 +118,19 @@ public class EditItemPopupActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
                 if(!text.toString().isEmpty()){
-                    currVak.setCijfer(Double.parseDouble(text.toString()));
-                    System.out.println(currVak.getCijfer());
-                    if(currVak.getCijfer() >= 5.5 || currVak.getH1cijfer() >= 5.5){
-                        currVak.setGehaald(true);
+                    if(Double.parseDouble(text.toString()) > 10){
+                        Toast.makeText(EditItemPopupActivity.this, "Cijfer kan niet hoger dan 10!", Toast.LENGTH_LONG).show();
+                        String newString = text.toString();
+                        cijfer.setText(newString.substring(0, newString.length() - 1));
                     } else {
-                        currVak.setGehaald(false);
+                        currVak.setCijfer(Double.parseDouble(text.toString()));
+                        if(currVak.getCijfer() >= 5.5 || currVak.getH1cijfer() >= 5.5){
+                            currVak.setGehaald(true);
+                        } else {
+                            currVak.setGehaald(false);
+                        }
                     }
+
                 } else {
                     currVak.setCijfer(0);
                     currVak.setGehaald(false);
@@ -141,11 +152,17 @@ public class EditItemPopupActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
                 if(!text.toString().isEmpty()){
-                    currVak.setH1cijfer(Double.parseDouble(text.toString()));
-                    if(currVak.getCijfer() >= 5.5 || currVak.getH1cijfer() >= 5.5){
-                        currVak.setGehaald(true);
+                    if(Double.parseDouble(text.toString()) > 10){
+                        Toast.makeText(EditItemPopupActivity.this, "Cijfer kan niet hoger dan 10!", Toast.LENGTH_LONG).show();
+                        String newString = text.toString();
+                        herkansingCijfer.setText(newString.substring(0, newString.length() - 1));
                     } else {
-                        currVak.setGehaald(false);
+                        currVak.setH1cijfer(Double.parseDouble(text.toString()));
+                        if (currVak.getCijfer() >= 5.5 || currVak.getH1cijfer() >= 5.5) {
+                            currVak.setGehaald(true);
+                        } else {
+                            currVak.setGehaald(false);
+                        }
                     }
                 } else {
                     currVak.setH1cijfer(0);
