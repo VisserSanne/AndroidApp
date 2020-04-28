@@ -9,8 +9,12 @@ import com.example.androidproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             Vak newVak = (Vak) data.getParcelable("result");
             DataHandler datahander = DataHandler.getHandler();
             datahander.addClass(newVak.getJaar(), newVak.getPeriode(), newVak);
+
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+            NavHostFragment.findNavController(fragment)
+                    .navigate(R.id.action_fragment_self);
         }
     }
     private void handleEditPopup(Intent intent) {
@@ -51,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
             Vak editedVak = (Vak) data.getParcelable("result");
             DataHandler datahander = DataHandler.getHandler();
             datahander.addClass(editedVak.getJaar(), editedVak.getPeriode(), editedVak);
+
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+            NavHostFragment.findNavController(fragment)
+                    .navigate(R.id.action_fragment_self);
         }
     }
 }

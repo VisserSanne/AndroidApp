@@ -6,19 +6,15 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.androidapp.Models.Vak;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +73,7 @@ public class DataHandler {
     public void getClasses(final ClassRetrievedFunc onDataRetrieved, Timespan timespan, int... yearAndPeriod) {
         Integer year = yearAndPeriod.length > 0 ? yearAndPeriod[0] : 0;
         Integer period = yearAndPeriod.length > 1 ? yearAndPeriod[1] : 0;
-        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+        List<Task<List<Vak>>> tasks = new ArrayList<>();
                 switch (timespan){
             case ALL:
                 tasks = getAllClasses();
@@ -90,37 +86,27 @@ public class DataHandler {
                 break;
         }
 
-        Task<List<QuerySnapshot>> finalTask = Tasks.whenAllSuccess(tasks);
+        Task<List<List<Vak>>> finalTask = Tasks.whenAllSuccess(tasks);
         finalTask.addOnCompleteListener(aggregatedTask -> {
-            List<QuerySnapshot> allTasks = aggregatedTask.getResult();
             ArrayList<Vak> vakken = new ArrayList<>();
-            for (QuerySnapshot query : allTasks) {
-                for (QueryDocumentSnapshot document : query) {
-                    if (document.exists()) {
-                        vakken.add(new Vak(document.getId(), document.getBoolean("Keuzevak?"),
-                                document.getDouble("EC"), document.getDouble("Cijfer"),
-                                document.getBoolean("Gehaald?"), document.getBoolean("Herkansing?"),
-                                document.getDouble("Herkansing1"), document.getString("Notitie"),
-                                document.getBoolean("Volgend?"), "Studiejaar " + year, "Periode " + period));
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                }
+            List<List<Vak>> allVakken = aggregatedTask.getResult();
+            for (List<Vak> periodeVakken : allVakken) {
+                vakken.addAll(periodeVakken);
             }
             onDataRetrieved.onClassesRetrieved(vakken);
         });
     }
 
-    private List<Task<QuerySnapshot>> getAllClasses() {
-        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+    private List<Task<List<Vak>>> getAllClasses() {
+        List<Task<List<Vak>>> tasks = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             tasks.addAll(getClassesByYear( i));
         }
         return tasks;
     }
 
-    private List<Task<QuerySnapshot>> getClassesByYear(int year) {
-        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+    private List<Task<List<Vak>>> getClassesByYear(int year) {
+        List<Task<List<Vak>>> tasks = new ArrayList<>();
 
         for (int i = 1; i <= 4; i++) {
             tasks.addAll( getClassesByPeriod(year, i));
@@ -128,37 +114,32 @@ public class DataHandler {
         return tasks;
     }
 
-    private List<Task<QuerySnapshot>> getClassesByPeriod(int year, int period) {
-        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+    private List<Task<List<Vak>>> getClassesByPeriod(int year, int period) {
+        List<Task<List<Vak>>> tasks = new ArrayList<>();
         tasks.add(FetchFromFirebase(year,period));
         return tasks;
-//        Task<QuerySnapshot> querySnapshotTask = db.collection("Username").document("Studiejaar" + year).collection(String.valueOf(period)).get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            ArrayList<Vak> vakken = new ArrayList<Vak>();
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                if (document.exists()) {
-//                                    vakken.add(new Vak(document.getId(), document.getBoolean("Keuzevak?"),
-//                                            document.getDouble("EC"), document.getDouble("Cijfer"),
-//                                            document.getBoolean("Gehaald?"), document.getBoolean("Herkansing?"),
-//                                            document.getDouble("Herkansing1"), document.getString("Notitie"),
-//                                            document.getBoolean("Volgend?"), "Studiejaar " + year, "Periode " + period));
-//                                } else {
-//                                    Log.d(TAG, "No such document");
-//                                }
-//                            }
-//                            onDataRetrieved.onClassesRetrieved(vakken);
-//                        } else {
-//                            Log.d(TAG, "get failed with ", task.getException());
-//                        }
-//                    }
-//                });
     }
 
-    public Task<QuerySnapshot> FetchFromFirebase(int year, int period) {
-        return db.collection("Username").document("Studiejaar" + year).collection(String.valueOf(period)).get();
+    public Task<List<Vak>> FetchFromFirebase(int year, int period) {
+        return db.collection("Username")
+                .document("Studiejaar" + year)
+                .collection(String.valueOf(period))
+                .get()
+                .onSuccessTask(queryDocumentSnapshots -> {
+                    ArrayList<Vak> vakken = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        if (document.exists()) {
+                            vakken.add(new Vak(document.getId(), document.getBoolean("Keuzevak?"),
+                                    document.getDouble("EC"), document.getDouble("Cijfer"),
+                                    document.getBoolean("Gehaald?"), document.getBoolean("Herkansing?"),
+                                    document.getDouble("Herkansing1"), document.getString("Notitie"),
+                                    document.getBoolean("Volgend?"), "Studiejaar " + year, "Periode " + period));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    }
+                    return Tasks.forResult(vakken);
+                });
     }
 
 }

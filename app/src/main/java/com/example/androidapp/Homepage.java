@@ -72,11 +72,13 @@ public class Homepage extends Fragment {
             pieData = new ArrayList<>();
             System.out.println(data);
             filterData(data);
-            pieData.add(new SliceValue(totalEcBehaaldProcent, parseColor("#03DAC5")).setLabel("EC behaald"));
-            pieData.add(new SliceValue(totalEcNietBehaaldProcent, parseColor("#00baa8")).setLabel("EC te behalen"));
+            pieData.add(new SliceValue(totalEcBehaaldProcent, parseColor("#03DAC5")).setLabel(totalEcBehaald + " EC behaald"));
+            pieData.add(new SliceValue(totalEcNietBehaaldProcent, parseColor("#00baa8")).setLabel((totalEc - totalEcBehaald) +" EC te behalen"));
             pieChartView.setVisibility(View.VISIBLE);
             PieChartData pieChartData = new PieChartData(pieData);
+            pieChartData.setHasLabels(true);
             pieChartView.setPieChartData(pieChartData);
+
         }, DataHandler.Timespan.ALL);
     }
 
